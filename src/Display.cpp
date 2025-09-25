@@ -3,54 +3,46 @@
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 
-#define ANCHO 128
-#define ALTO 64
+void setUpPantalla(Adafruit_SSD1306 pantalla){
 
-// CREAR EL OBJETO SSD1306
+		if(!pantalla.begin(SSD1306_SWITCHCAPVCC,0x3C)){
+			Serial.print("Error al icicializar la pantalla");
+		}
 
-Adafruit_SSD1306 pantalla(ANCHO,ALTO, &Wire);
+	pantalla.begin(SSD1306_SWITCHCAPVCC,0x3C);
+		Serial.println("PANTALLA INICIADA...");
+		Serial.println("Generando texto de inicio...");
+		delay(2000);
 
+		pantalla.clearDisplay();
+		pantalla.setTextSize(1);
+		pantalla.setTextColor(SSD1306_WHITE);
+		pantalla.setCursor(0,0);
+		pantalla.print("INICIANDO SSD1306...");
+		pantalla.display();
 
-void setUpPantalla()	{
+		delay(3000);
+		pantalla.clearDisplay();
+		pantalla.print("INICIALIZANDO FUNCIONES");
 
-	if(!pantalla.begin(SSD1306_SWITCHCAPVCC,0x3C)){
-
-		Serial.println("ERROR AL INCIAR LA PANTALLA");
-	}
-	int cont = 0;
-
-	for(int i=1; i <=3; i++){
-		cont = cont + 1;
-
-		textInicioPantall(cont);
-	}
-
-	pantalla.clearDisplay();
-
+		
+	// TEXTO DE INICIALIZACION DE LA PANTALLA
 }
 
-void textInicioPantall (int cont){
+void displayTempHum(float temp, float hum, Adafruit_SSD1306 pantalla){
 
-	pantalla.clearDisplay();
-	pantalla.setTextSize(1);
-	pantalla.setTextColor(SSD1306_WHITE);
-	pantalla.setCursor(20,30);
+	pantalla.setCursor(5,5);
+	pantalla.setTextSize(2);
+	pantalla.println("Temperatura:  ");
+	pantalla.print(temp);
 
-	pantalla.printf("INICIANDO PANTALLA EN...", cont);
-	pantalla.display();
+	pantalla.setCursor(5,10);
+	pantalla.println("Humidity: ");
+	pantalla.print(hum);
+	
 
-	delay(500);
 
-	if(cont == 3){
-		pantalla.stopscroll();
-	}
-	else {
-		pantalla.startscrollright(0x00, 0x0f);		
-		}
 	
 }
-
-
-
 
 
